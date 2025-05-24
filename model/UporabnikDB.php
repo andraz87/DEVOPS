@@ -44,4 +44,10 @@ class UporabnikDB {
         return $stmt->fetchAll();
     }
 
+        public static function setTerminNull($terminId) {
+        $db = DBInit::getInstance();
+        $stmt = $db->prepare("UPDATE uporabnik SET termin_id = NULL WHERE termin_id = ?");
+        $stmt->execute([$terminId]);
+    }
+
 }

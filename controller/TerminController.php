@@ -36,6 +36,7 @@ class TerminController {
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $terminID = $_POST["termin_id"];
                 TerminDB::del($terminID);
+                UporabnikDB::setTerminNull($terminID);
             }
             ViewHelper::redirect(BASE_URL . "prof");
         }
