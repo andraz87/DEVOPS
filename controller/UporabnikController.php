@@ -93,4 +93,25 @@ public static function login() {
         ViewHelper::render("view/prisotnost-form.php");
     }
 
+    public static function registracija() {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $username = $_POST["username"];
+            $password = $_POST["password"];
+            $ime = $_POST["ime"];
+            $priimek = $_POST["priimek"];
+            $tip_uporabnika = $_POST["tip_uporabnika"];
+
+            if (UporabnikDB::getByUsername($username)) {
+                ViewHelper::render("view/registracija-form.php", [
+                    "errorMessage" => "Uporabniško ime že obstaja."
+                ]);
+            } else {
+                UporabnikDB::create($username, $password, $ime, $priimek, $tip_uporabnika);
+                ViewHelper::redirect(BASE_URL . "login");
+            }
+        } else {
+            ViewHelper::render("view/registracija.php", []);
+        }
+    }
+
 }   

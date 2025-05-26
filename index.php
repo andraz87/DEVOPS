@@ -58,6 +58,9 @@ switch ($path) {
     case "prisotni":
         PrisotnostController::prisotni();
         break;
+    case "registracija":
+        UporabnikController::registracija();
+        break;
 
 
 

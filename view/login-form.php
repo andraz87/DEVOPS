@@ -32,8 +32,13 @@
 
             <button type="submit" class="btn btn-primary w-100">Prijava</button>
         </form>
+        
 
         <hr class="my-3">
+
+        <a href="<?= BASE_URL ?>registracija" class="btn btn-primary w-100">Registriraj se</a>
+
+                <hr class="my-3">
 
         <a href="<?= BASE_URL ?>seznam" class="btn btn-outline-secondary w-100">Nadaljuj brez prijave</a>
     </div>

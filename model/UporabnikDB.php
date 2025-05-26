@@ -63,4 +63,10 @@ class UporabnikDB {
         return $stmt->fetchAll();
     }
 
+    public static function create($uporabniskoIme, $geslo, $ime, $priimek, $tipUporabnika) {
+        $db = DBInit::getInstance();
+        $stmt = $db->prepare("INSERT INTO uporabnik (uporabnisko_ime, geslo, ime, priimek, tip_uporabnika) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$uporabniskoIme, $geslo, $ime, $priimek, $tipUporabnika]);
+    }
+
 }
