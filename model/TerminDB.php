@@ -5,13 +5,14 @@ require_once("model/DBInit.php");
 class TerminDB {
     public static function getAll() {
         $db = DBInit::getInstance();
-        $stmt = $db->query("SELECT * FROM termin");
+        $stmt = $db->query("SELECT * FROM termin WHERE seIzvaja = TRUE");
         return $stmt->fetchAll();
     }
 
     public static function insert($data) {
         $db = DBInit::getInstance();
-        $stmt = $db->prepare("INSERT INTO termin (naslov, zacetek, konec, dan, lokacija, kapaciteta) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt = $db->prepare("INSERT INTO termin (naslov, zacetek, konec, dan, lokacija, kapaciteta, seIzvaja)
+                            VALUES (?, ?, ?, ?, ?, ?, TRUE)");
         $stmt->execute([
             $data["naslov"],
             $data["zacetek"],
@@ -24,10 +25,9 @@ class TerminDB {
 
     public static function del($terminID) {
         $db = DBInit::getInstance();
-        $stmt = $db->prepare("DELETE FROM termin WHERE id = ?");
+        $stmt = $db->prepare("UPDATE termin SET seIzvaja = FALSE WHERE id = ?");
         $stmt->execute([$terminID]);
     }
-
 
     public static function prostaMesta($termin_id) {
         $db = DBInit::getInstance();
@@ -41,7 +41,7 @@ class TerminDB {
     }
 
     public static function uredi($data) {
-                $db = DBInit::getInstance();
+        $db = DBInit::getInstance();
         $stmt = $db->prepare("UPDATE termin 
             SET naslov = ?, zacetek = ?, konec = ?, dan = ?, lokacija = ?, kapaciteta = ? 
             WHERE id = ?");
@@ -57,14 +57,9 @@ class TerminDB {
     }
 
     public static function get($terminID) {
-    $db = DBInit::getInstance();
-    $stmt = $db->prepare("SELECT * FROM termin WHERE id = ?");
-    $stmt->execute([$terminID]);
-    return $stmt->fetch();
-}
-
-
-
-
-
+        $db = DBInit::getInstance();
+        $stmt = $db->prepare("SELECT * FROM termin WHERE id = ?");
+        $stmt->execute([$terminID]);
+        return $stmt->fetch();
+    }
 }
