@@ -57,16 +57,19 @@ class UporabnikDB {
         return $stmt->fetchAll();
     }
 
-    public static function uporabnikiKiNisoNaTerminu() {
+    public static function uporabnikiKiNisoNaTerminu($terminId) {
         $db = DBInit::getInstance();
-        $stmt = $db->query("SELECT * FROM uporabnik WHERE termin_id IS NULL AND tip_uporabnika = 'student' ORDER BY ime, priimek");
+        $stmt = $db->prepare("SELECT * FROM uporabnik WHERE (NOT termin_id = ? OR termin_id IS NULL) AND tip_uporabnika = 'student' ORDER BY ime, priimek");
+        $stmt->execute([$terminId]);
         return $stmt->fetchAll();
     }
 
     public static function create($uporabniskoIme, $geslo, $ime, $priimek, $tipUporabnika) {
-        $db = DBInit::getInstance();
-        $stmt = $db->prepare("INSERT INTO uporabnik (uporabnisko_ime, geslo, ime, priimek, tip_uporabnika) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$uporabniskoIme, $geslo, $ime, $priimek, $tipUporabnika]);
-    }
+    $db = DBInit::getInstance();
+    $hashedPassword = password_hash($geslo, PASSWORD_DEFAULT); // varno hashanje
+    $stmt = $db->prepare("INSERT INTO uporabnik (uporabnisko_ime, geslo, ime, priimek, tip_uporabnika) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$uporabniskoIme, $hashedPassword, $ime, $priimek, $tipUporabnika]);
+}
+
 
 }

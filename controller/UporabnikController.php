@@ -4,28 +4,29 @@ require_once("model/UporabnikDB.php");
 
 class UporabnikController {
 
-public static function login() {
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $user = UporabnikDB::getByUsername($_POST["username"]);
-        $password = $_POST["password"];
-
-        if ($user && $password === $user["geslo"]) {
-            $_SESSION["user"] = $user;
-
-            if ($user["tip_uporabnika"] === "profesor") {
-                ViewHelper::redirect(BASE_URL . "prof");
+    public static function login() {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $user = UporabnikDB::getByUsername($_POST["username"]);
+            $password = $_POST["password"];
+        
+            if ($user && password_verify($password, $user["geslo"])) {
+                $_SESSION["user"] = $user;
+            
+                if ($user["tip_uporabnika"] === "profesor") {
+                    ViewHelper::redirect(BASE_URL . "prof");
+                } else {
+                    ViewHelper::redirect(BASE_URL);
+                }
             } else {
-                ViewHelper::redirect(BASE_URL);
+                ViewHelper::render("view/login-form.php", [
+                    "errorMessage" => "Napačno uporabniško ime ali geslo."
+                ]);
             }
         } else {
-            ViewHelper::render("view/login-form.php", [
-                "errorMessage" => "Napačno uporabniško ime ali geslo."
-            ]);
+            ViewHelper::render("view/login-form.php", []);
         }
-    } else {
-        ViewHelper::render("view/login-form.php", []);
     }
-}
+
 
     public static function logout() {
         session_destroy();

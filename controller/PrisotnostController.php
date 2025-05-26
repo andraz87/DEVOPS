@@ -19,8 +19,9 @@ public static function prisotni() {
             ViewHelper::redirect(BASE_URL . "prof");
         } else {
             $studenti = UporabnikDB::getStudenti();
-            $studentiNaTerminu = UporabnikDB::uporabnikiNaTerminu($_GET["terminID"] ?? null);
-            $studentiKiNisoNaTerminu = UporabnikDB::uporabnikiKiNisoNaTerminu();
+            $terminID = $_GET["terminID"] ?? null;
+            $studentiNaTerminu = UporabnikDB::uporabnikiNaTerminu($terminID);
+            $studentiKiNisoNaTerminu = UporabnikDB::uporabnikiKiNisoNaTerminu($terminID);
             $terminID = $_GET["terminID"];
             $termin = TerminDB::get($terminID);
 

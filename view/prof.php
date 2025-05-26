@@ -15,7 +15,7 @@ $dnevi = ["Nedelja", "Ponedeljek", "Torek", "Sreda", "Četrtek", "Petek", "Sobot
 <div class="container py-4">
 
     <header class="mb-3">
-        <p class="text-end">Prijavljen si kot: <strong><?= htmlspecialchars($username) ?></strong></p>
+        <p class="mb-1">Prijavljen si kot: <strong><?= htmlspecialchars($username) ?></strong></p>
     </header>
 
     <nav class="mb-4">

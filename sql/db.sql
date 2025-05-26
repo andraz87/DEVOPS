@@ -52,31 +52,5 @@ VALUES
     ('Fitnes', '17:00:00', '18:00:00', 5, 'Fitnes center', 10, TRUE);
 
 
-INSERT INTO uporabnik (uporabnisko_ime, ime, priimek, geslo, tip_uporabnika, termin_id)
-VALUES
-    ('pr', 'Profesor', 'Gazda', 'geslo0', 'profesor', NULL),
-    ('pr2', 'Profesor', 'Gazda', 'geslo0', 'profesor', NULL),
-    ('a', 'Lenko', 'Fuks', 'geslo1', 'student', 1),
-    ('b', 'Ana', 'Potočnik', 'geslo2', 'student', 2),
-    ('c', 'Franci', 'meden', 'geslo3', 'student', 1),
-    ('d', 'Maja', 'Kovač', 'geslo', 'student', 3),
-    ('e', 'Tina', 'Novak', 'geslo', 'student', 2),
-    ('f', 'Marko', 'Zupančič', 'geslo', 'student', 1),
-    ('g', 'Petra', 'Horvat', 'geslo', 'student', 3),
-    ('h', 'Luka', 'Kralj', 'geslo', 'student', 2),
-    ('i', 'Sara', 'Jerman', 'geslo', 'student', NULL),
-    ('j', 'Miha', 'Kovačič', 'geslo', 'student', NULL),
-    ('k', 'Nina', 'Zajc', 'geslo', 'student', 2),
-    ('l', 'Tomaž', 'Pavlin', 'geslo', 'student', 1),
-    ('m', 'Eva', 'Kranjc', 'geslo', 'student', 3),
-    ('n', 'Andrej', 'Breznik', 'geslo', 'student', 2),
-    ('o', 'Katarina', 'Škofic', 'geslo', 'student', 1),
-    ('p', 'Žiga', 'Petek', 'geslo', 'student', 3);
 
 
-
-INSERT INTO prisotnost (uporabnik_id, termin_id, datum)
-VALUES
-    (1, 1, '2023-10-01'),  -- Lenko  Košarka
-    (2, 1, '2023-10-01'),  -- Ana  Košarka
-    (1, 2, '2023-10-02');  -- Lenko  Tek
