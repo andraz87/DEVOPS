@@ -3,56 +3,70 @@ $dnevi = ["Nedelja", "Ponedeljek", "Torek", "Sreda", "Četrtek", "Petek", "Sobot
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="sl">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Termini</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <p>prijavljen si kot: <?= htmlspecialchars($username) ?></p>
-        <p>Imaš <?php echo UporabnikDB::steviloPrisotnosti($_SESSION["user"]["id"]); ?> prisotnosti</p>
+    <div class="container py-4">
+        <header class="mb-4">
+            <div class="alert alert-primary" role="alert">
+                <p class="mb-1">Prijavljen si kot: <strong><?= htmlspecialchars($username) ?></strong></p>
+                <p class="mb-0">Imaš <strong><?= UporabnikDB::steviloPrisotnosti($_SESSION["user"]["id"]); ?></strong> prisotnosti.</p>
+            </div>
+            <a href="<?= BASE_URL . "logout" ?>" class="btn btn-outline-danger mb-3">Odjava</a>
+        </header>
 
-    </header>
-    <nav>
-        <ul>
-            <li><a href="<?= BASE_URL . "logout" ?>">Odjava</a></li>
-        </ul>
-    </nav>
+        <h2 class="mb-4">Razpoložljivi termini</h2>
 
-<h2>Razpoložljivi termini</h2>
+        <?php if (isset($_SESSION["user"]) && $_SESSION["user"]["tip_uporabnika"] === "student"): ?>
+            <form action="<?= BASE_URL ?>" method="post">
+                <div class="row row-cols-1 g-3">
+                    <?php foreach ($termini as $termin): ?>
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <label class="form-check-label w-100">
+                                        <input type="radio" class="form-check-input me-2" name="termin_id" value="<?= $termin["id"] ?>" required>
+                                        <h5 class="card-title d-inline"><?= htmlspecialchars($termin["naslov"]) ?></h5>
+                                        <?php if ($termin["id"] == $_SESSION["user"]["termin_id"]): ?>
+                                            <span class="badge bg-success ms-2">Tvoj termin</span>
+                                        <?php endif; ?>
+                                        <p class="card-text mt-2 mb-1">
+                                            <?= htmlspecialchars($dnevi[$termin["dan"]]) ?>,
+                                            <?= date("H:i", strtotime($termin["zacetek"])) ?> – <?= date("H:i", strtotime($termin["konec"])) ?>
+                                        </p>
+                                        <p class="card-text">
+                                            <?= htmlspecialchars($termin["lokacija"]) ?>,
+                                            prostih mest:
+                                            <?= TerminDB::prostaMesta($termin["id"]) ?> /
+                                            <?= htmlspecialchars($termin["kapaciteta"]) ?>
+                                        </p>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
 
-<?php if (isset($_SESSION["user"]) && $_SESSION["user"]["tip_uporabnika"] === "student"): ?>
-<form action="<?= BASE_URL?>" method="post">
-    <?php foreach ($termini as $termin): ?>
-        <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
-            <label>
-                <input type="radio" name="termin_id" value="<?= $termin["id"] ?>" required>
-                
-                <?= htmlspecialchars($termin["naslov"]) ?>
-                <?php if ($termin["id"] == $_SESSION["user"]["termin_id"]) echo "__________________________(tvoj termin)"; ?>
-                <br>
-                <?= htmlspecialchars($dnevi[$termin["dan"]]) ?>,
-                <?= date("H:i", strtotime($termin["zacetek"])) ?> – <?= date("H:i", strtotime($termin["konec"])) ?>
-                <br>
-                <?= htmlspecialchars($termin["lokacija"]) ?>, prostih mest: <?=TerminDB::prostaMesta($termin["id"]) ?> /
-                <?= htmlspecialchars($termin["kapaciteta"]) ?>
-            </label>
-        </div>
-    <?php endforeach; ?>
-    <button type="submit">Pošlji rezervacijo</button>
-    <?php if (!empty($errorMessage)): ?>
-        <p style="color: red;"><?= htmlspecialchars($errorMessage) ?></p>
-    <?php endif; ?>
-</form>
-<?php else: ?>
-<p>Za rezervacijo termina se morate prijaviti kot študent.</p>
-<?php endif; ?>
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Pošlji rezervacijo</button>
+                </div>
 
-    
+                <?php if (!empty($errorMessage)): ?>
+                    <div class="alert alert-danger mt-3" role="alert">
+                        <?= htmlspecialchars($errorMessage) ?>
+                    </div>
+                <?php endif; ?>
+            </form>
+        <?php else: ?>
+            <div class="alert alert-warning">Za rezervacijo termina se morate prijaviti kot študent.</div>
+        <?php endif; ?>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

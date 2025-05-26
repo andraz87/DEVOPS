@@ -3,63 +3,69 @@ $dnevi = ["Nedelja", "Ponedeljek", "Torek", "Sreda", "Četrtek", "Petek", "Sobot
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="sl">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Termini</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-    <header>
-        <p>prijavljen si kot: <?= htmlspecialchars($username) ?></p>
+<div class="container py-4">
 
+    <header class="mb-3">
+        <p class="text-end">Prijavljen si kot: <strong><?= htmlspecialchars($username) ?></strong></p>
     </header>
-    <nav>
-        <ul>
-            <li><a href="<?= BASE_URL . "logout" ?>">Odjava</a></li>
+
+    <nav class="mb-4">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link text-danger" href="<?= BASE_URL . "logout" ?>">Odjava</a>
+            </li>
         </ul>
     </nav>
 
-<h2>termini</h2>
+    <h2 class="mb-4">Razpoložljivi termini</h2>
 
-<?php foreach ($termini as $termin): ?>
-    <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
-        <p>
-            <?= htmlspecialchars($termin["naslov"]) ?>
-            <br>
-            <?= htmlspecialchars($dnevi[$termin["dan"]]) ?>,
-            <?= date("H:i", strtotime($termin["zacetek"])) ?> – <?= date("H:i", strtotime($termin["konec"])) ?>
-            <br>
-            <?= htmlspecialchars($termin["lokacija"]) ?>,
-            prostih mest: <?= TerminDB::prostaMesta($termin["id"]) ?> /
-            <?= htmlspecialchars($termin["kapaciteta"]) ?>
-        </p>
+    <?php foreach ($termini as $termin): ?>
+        <div class="card mb-3">
+            <div class="card-body">
+                <p class="card-text">
+                    <strong><?= htmlspecialchars($termin["naslov"]) ?></strong><br>
+                    <?= htmlspecialchars($dnevi[$termin["dan"]]) ?>,
+                    <?= date("H:i", strtotime($termin["zacetek"])) ?> – <?= date("H:i", strtotime($termin["konec"])) ?><br>
+                    <?= htmlspecialchars($termin["lokacija"]) ?>,<br>
+                    prostih mest: <strong><?= TerminDB::prostaMesta($termin["id"]) ?></strong> /
+                    <?= htmlspecialchars($termin["kapaciteta"]) ?>
+                </p>
 
-        <form action="<?= BASE_URL . "uredi" ?>" method="get" style="display:inline;">
-            <input type="hidden" name="terminID" value="<?= $termin["id"] ?>">
-            <button type="submit">Uredi</button>
-        </form>
+                <div class="d-flex flex-wrap gap-2">
+                    <form action="<?= BASE_URL . "uredi" ?>" method="get">
+                        <input type="hidden" name="terminID" value="<?= $termin["id"] ?>">
+                        <button type="submit" class="btn btn-warning btn-sm">Uredi</button>
+                    </form>
 
-        <form action="<?= BASE_URL . "izbrisi" ?>" method="post" style="display:inline;">
-            <input type="hidden" name="termin_id" value="<?= $termin["id"] ?>">
-            <button type="submit" onclick="return confirm('Si prepričan, da želiš izbrisati?')">Izbriši</button>
-        </form>
-        <form action="<?= BASE_URL . "prisotni" ?>" method="get">
-            <input type="hidden" name="terminID" value="<?= $termin["id"] ?>">
-            <button type="submit">označi prisotne</button>
-        </form>
-    </div>
-<?php endforeach; ?>
+                    <form action="<?= BASE_URL . "izbrisi" ?>" method="post" onsubmit="return confirm('Si prepričan, da želiš izbrisati?')">
+                        <input type="hidden" name="termin_id" value="<?= $termin["id"] ?>">
+                        <button type="submit" class="btn btn-danger btn-sm">Izbriši</button>
+                    </form>
 
-<form action="<?= BASE_URL . "dodaj" ?>" method="get">
-    <button type="submit">Dodaj termin</button>
-</form>
+                    <form action="<?= BASE_URL . "prisotni" ?>" method="get">
+                        <input type="hidden" name="terminID" value="<?= $termin["id"] ?>">
+                        <button type="submit" class="btn btn-primary btn-sm">Označi prisotne</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
 
+    <form action="<?= BASE_URL . "dodaj" ?>" method="get">
+        <button type="submit" class="btn btn-success">Dodaj termin</button>
+    </form>
 
+</div>
 
-    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -2,50 +2,47 @@
 $dnevi = ["Nedelja", "Ponedeljek", "Torek", "Sreda", "Četrtek", "Petek", "Sobota"];
 ?>
 
-
 <!DOCTYPE html>
-<html>
+<html lang="sl">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Prisotnost za termin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-
-<h2>Prisotnost za termin:</h2>
-        <p>
-            <?= htmlspecialchars($termin["naslov"]) ?>
-            <br>
+<div class="container py-4">
+    <h2>Prisotnost za termin:</h2>
+    <div class="mb-3 p-3 border rounded bg-light">
+        <p class="mb-0">
+            <strong><?= htmlspecialchars($termin["naslov"]) ?></strong><br />
             <?= htmlspecialchars($dnevi[$termin["dan"]]) ?>,
-            <?= date("H:i", strtotime($termin["zacetek"])) ?> – <?= date("H:i", strtotime($termin["konec"])) ?>
-            <br>
-            <?= htmlspecialchars($termin["lokacija"]) ?>,
-            prostih mest: <?= TerminDB::prostaMesta($termin["id"]) ?> /
+            <?= date("H:i", strtotime($termin["zacetek"])) ?> – <?= date("H:i", strtotime($termin["konec"])) ?><br />
+            <?= htmlspecialchars($termin["lokacija"]) ?>,<br />
+            prostih mest: <span class="fw-bold"><?= TerminDB::prostaMesta($termin["id"]) ?></span> /
             <?= htmlspecialchars($termin["kapaciteta"]) ?>
         </p>
+    </div>
 
+    <h3>Označi prisotne:</h3>
 
-        <h3>Označi prisotne:</h3>
-
-
-<form method="post" action="<?= BASE_URL ?>prisotni">
-    <ul>
-        <?php foreach ($studenti as $student): ?>
-            <li>
-                <label>
-                    <input type="checkbox" name="studenti[]" value="<?= $student["id"] ?>" />
-                    <?= htmlspecialchars($student["ime"]) ?> <?= htmlspecialchars($student["priimek"]) ?> 
-                </label>
-            </li>
-        <?php endforeach; ?>
+    <form method="post" action="<?= BASE_URL ?>prisotni">
+        <ul class="list-unstyled">
+            <?php foreach ($studenti as $student): ?>
+                <li class="form-check">
+                    <input class="form-check-input" type="checkbox" name="studenti[]" value="<?= $student["id"] ?>" id="student<?= $student["id"] ?>" />
+                    <label class="form-check-label" for="student<?= $student["id"] ?>">
+                        <?= htmlspecialchars($student["ime"]) ?> <?= htmlspecialchars($student["priimek"]) ?>
+                    </label>
+                </li>
+            <?php endforeach; ?>
+        </ul>
         <input type="hidden" name="terminID" value="<?= $termin["id"] ?>" />
-    </ul>
-    <button type="submit">Potrdi prisotnost</button>
-</form>
+        <button type="submit" class="btn btn-primary">Potrdi prisotnost</button>
+    </form>
+</div>
 
-    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
