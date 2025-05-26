@@ -5,7 +5,7 @@ require_once("model/DBInit.php");
 class TerminDB {
     public static function getAll() {
         $db = DBInit::getInstance();
-        $stmt = $db->query("SELECT * FROM termin WHERE seIzvaja = TRUE");
+        $stmt = $db->query("SELECT * FROM termin WHERE seIzvaja = TRUE  ORDER BY dan, zacetek");
         return $stmt->fetchAll();
     }
 

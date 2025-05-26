@@ -31,12 +31,12 @@
             </select>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-6">
             <label for="zacetek" class="form-label">Od (ura)</label>
             <input type="time" class="form-control" id="zacetek" name="zacetek" value="<?= htmlspecialchars($zacetek) ?>" required>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-6">
             <label for="konec" class="form-label">Do (ura)</label>
             <input type="time" class="form-control" id="konec" name="konec" value="<?= htmlspecialchars($konec) ?>" required>
         </div>
@@ -46,7 +46,7 @@
             <input type="text" class="form-control" id="lokacija" name="lokacija" value="<?= htmlspecialchars($lokacija) ?>" required>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-6">
             <label for="kapaciteta" class="form-label">Kapaciteta</label>
             <input type="number" class="form-control" id="kapaciteta" name="kapaciteta" min="1" value="<?= htmlspecialchars($kapaciteta) ?>" required>
         </div>

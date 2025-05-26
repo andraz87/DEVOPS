@@ -38,16 +38,29 @@ class UporabnikDB {
         return $stmt->fetchColumn();
     }
 
-        public static function getStudenti() {
+    public static function getStudenti() {
         $db = DBInit::getInstance();
         $stmt = $db->query("SELECT * FROM uporabnik WHERE tip_uporabnika = 'student'");
         return $stmt->fetchAll();
     }
 
-        public static function setTerminNull($terminId) {
+    public static function setTerminNull($terminId) {
         $db = DBInit::getInstance();
         $stmt = $db->prepare("UPDATE uporabnik SET termin_id = NULL WHERE termin_id = ?");
         $stmt->execute([$terminId]);
+    }
+
+    public static function uporabnikiNaTerminu($terminId) {
+        $db = DBInit::getInstance();
+        $stmt = $db->prepare("SELECT * FROM uporabnik WHERE termin_id = ? AND tip_uporabnika = 'student' ORDER BY ime, priimek");
+        $stmt->execute([$terminId]);
+        return $stmt->fetchAll();
+    }
+
+    public static function uporabnikiKiNisoNaTerminu() {
+        $db = DBInit::getInstance();
+        $stmt = $db->query("SELECT * FROM uporabnik WHERE termin_id IS NULL AND tip_uporabnika = 'student' ORDER BY ime, priimek");
+        return $stmt->fetchAll();
     }
 
 }

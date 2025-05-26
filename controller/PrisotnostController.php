@@ -19,10 +19,12 @@ public static function prisotni() {
             ViewHelper::redirect(BASE_URL . "prof");
         } else {
             $studenti = UporabnikDB::getStudenti();
+            $studentiNaTerminu = UporabnikDB::uporabnikiNaTerminu($_GET["terminID"] ?? null);
+            $studentiKiNisoNaTerminu = UporabnikDB::uporabnikiKiNisoNaTerminu();
             $terminID = $_GET["terminID"];
             $termin = TerminDB::get($terminID);
 
-            ViewHelper::render("view/prisotnost.php", ["studenti" => $studenti, "terminID" => $terminID, "termin" => $termin]);
+            ViewHelper::render("view/prisotnost.php", ["studentiNaTerminu" =>  $studentiNaTerminu,"studentiKiNisoNaTerminu" => $studentiKiNisoNaTerminu , "terminID" => $terminID, "termin" => $termin]);
         }
 
 

@@ -26,10 +26,10 @@ $dnevi = ["Nedelja", "Ponedeljek", "Torek", "Sreda", "Četrtek", "Petek", "Sobot
     </div>
 
     <h3>Označi prisotne:</h3>
-
     <form method="post" action="<?= BASE_URL ?>prisotni">
-        <ul class="list-unstyled">
-            <?php foreach ($studenti as $student): ?>
+        <h4>Študenti na terminu</h4>
+        <ul class="list-unstyled mb-4">
+            <?php foreach ($studentiNaTerminu as $student): ?>
                 <li class="form-check">
                     <input class="form-check-input" type="checkbox" name="studenti[]" value="<?= $student["id"] ?>" id="student<?= $student["id"] ?>" />
                     <label class="form-check-label" for="student<?= $student["id"] ?>">
@@ -38,6 +38,19 @@ $dnevi = ["Nedelja", "Ponedeljek", "Torek", "Sreda", "Četrtek", "Petek", "Sobot
                 </li>
             <?php endforeach; ?>
         </ul>
+
+        <h4>Študenti, ki niso na terminu</h4>
+        <ul class="list-unstyled mb-4">
+            <?php foreach ($studentiKiNisoNaTerminu as $student): ?>
+                <li class="form-check">
+                    <input class="form-check-input" type="checkbox" name="studenti[]" value="<?= $student["id"] ?>" id="student<?= $student["id"] ?>" />
+                    <label class="form-check-label" for="student<?= $student["id"] ?>">
+                        <?= htmlspecialchars($student["ime"]) ?> <?= htmlspecialchars($student["priimek"]) ?>
+                    </label>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+
         <input type="hidden" name="terminID" value="<?= $termin["id"] ?>" />
         <button type="submit" class="btn btn-primary">Potrdi prisotnost</button>
     </form>
