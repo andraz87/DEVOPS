@@ -51,6 +51,30 @@ VALUES
     ('Tek', '10:00:00', '11:00:00', 3, 'Stadion', 15, TRUE),
     ('Fitnes', '17:00:00', '18:00:00', 5, 'Fitnes center', 10, TRUE);
 
+    INSERT INTO uporabnik (uporabnisko_ime, ime, priimek, geslo, tip_uporabnika, termin_id)
+VALUES
+    ('prof1', 'Profesor', 'Gazda', '$2y$10$hml7I4XFsk4YalO4RH/dj.WwfMKE51Pn5hvcACK6Hlvk62XRdWgJ6', 'profesor', NULL),
+    ('prof2', 'lojue', 'Slak', '$2y$10$1tS9g2TbI9PpwNdsiI/CYeu2eq3SMLjt1uuWBMhbUvD/IpQXBKnZi', 'profesor', NULL),
+    ('stud1', 'Lenko', 'Fuks', '$2y$10$wgIHdFzImFjxcPyQIhwyTe8rO29/g5VwGF.qVyNVUydNrxRySQgpC', 'student', 1),
+    ('stud2', 'Ana', 'Potočnik', '$2y$10$7Bwbs5M/fCs81ZaguDmR9.ZOjw9IBpXNKY4bww5sBpbU/32s8UXC6', 'student', 2),
+    ('stud3', 'Franci', 'meden', '$2y$10$aG2BvMv7KehatQYep1dbB.bU4h7DxxX2X9u4qyehUaBA.b8uGI2na', 'student', 1),
+    ('stud4', 'Maja', 'Kovač', '$2y$10$FfdJqZ06cBRQlVwG2S8b5e/kGevSfD1MU1wHDHliIc1lBM2ft5xHy', 'student', 3),
+    ('stud5', 'Tina', 'Novak', '$2y$10$NBGLSLBXdHThiPzTtaaXIuUDiFHYMHX6y7VpShsilSKAFuUzfl/ZO', 'student', 2);
+
+
+
+    INSERT INTO prisotnost (uporabnik_id, termin_id, datum)
+VALUES
+    (1, 1, '2023-10-01'),
+    (2, 1, '2023-10-01'),
+    (3, 1, '2023-10-01'),
+    (4, 2, '2023-10-02'),
+    (5, 2, '2023-10-02'),
+    (1, 4, '2023-10-04'),
+    (2, 5, '2023-10-05'),
+    (3, 5, '2023-10-06'),
+    (1, 2, '2023-10-02');
+
 
 
 
