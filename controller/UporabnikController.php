@@ -1,6 +1,7 @@
 <?php
 // controller/UporabnikController.php
 require_once("model/UporabnikDB.php");
+require_once(__DIR__ . '/../service/RedisService.php');
 
 class UporabnikController {
 
@@ -42,12 +43,19 @@ class UporabnikController {
             if ($user["tip_uporabnika"] === "student") {
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (TerminDB::prostaMesta($terminId) > 0) {
-                    
-                    $uporabnikId = $_SESSION["user"]["id"];
-                    $terminId = $_POST["termin_id"];
-                    UporabnikDB::updateTermin($uporabnikId, $terminId);
-                    $_SESSION["user"] = UporabnikDB::getByUsername($user["uporabnisko_ime"]);
-                    }
+
+                        $uporabnikId = $_SESSION["user"]["id"];
+                        $terminId = $_POST["termin_id"];
+                        UporabnikDB::updateTermin($uporabnikId, $terminId);
+                        $_SESSION["user"] = UporabnikDB::getByUsername($user["uporabnisko_ime"]);
+
+                        // Invalidate cached termini after booking
+                        try {
+                            RedisService::delete('termini_all');
+                        } catch (\Exception $e) {
+                            // ignore cache errors
+                        }
+                        }
                     else {
                         $username = $_SESSION["user"]["uporabnisko_ime"];
                         $termini = TerminDB::getAll();
@@ -59,7 +67,22 @@ class UporabnikController {
                         return;
                     }
                 }
-                $termini = TerminDB::getAll();
+                // Try to get termini from cache first
+                $cacheKey = 'termini_all';
+                $termini = null;
+                try {
+                    $termini = RedisService::get($cacheKey);
+                } catch (\Exception $e) {
+                    $termini = null;
+                }
+                if ($termini === null) {
+                    $termini = TerminDB::getAll();
+                    try {
+                        RedisService::set($cacheKey, $termini, 300);
+                    } catch (\Exception $e) {
+                        // ignore cache errors
+                    }
+                }
                 $username = $_SESSION["user"]["uporabnisko_ime"];
                 ViewHelper::render("view/home-page.php", ["termini" => $termini, "username" => $username]);
             }
@@ -77,7 +100,22 @@ class UporabnikController {
         if (isset($_SESSION["user"])) {
             $user = $_SESSION["user"];
             if ($user["tip_uporabnika"] === "profesor") {
-                $termini = TerminDB::getAll();
+                // Use cached termini when possible
+                $cacheKey = 'termini_all';
+                $termini = null;
+                try {
+                    $termini = RedisService::get($cacheKey);
+                } catch (\Exception $e) {
+                    $termini = null;
+                }
+                if ($termini === null) {
+                    $termini = TerminDB::getAll();
+                    try {
+                        RedisService::set($cacheKey, $termini, 300);
+                    } catch (\Exception $e) {
+                        // ignore cache errors
+                    }
+                }
                 $username = $_SESSION["user"]["uporabnisko_ime"];
                 ViewHelper::render("view/prof.php" , ["termini" => $termini, "username"=> $username]);
             }

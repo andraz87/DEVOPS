@@ -1,6 +1,7 @@
 <?php
 require_once("model/PrisotnostDB.php");
 require_once("ViewHelper.php");
+require_once(__DIR__ . '/../service/RedisService.php');
 
 class PrisotnostController {
 
@@ -20,10 +21,23 @@ public static function prisotni() {
         } else {
             $studenti = UporabnikDB::getStudenti();
             $terminID = $_GET["terminID"] ?? null;
+
+            // students on and off the term
             $studentiNaTerminu = UporabnikDB::uporabnikiNaTerminu($terminID);
             $studentiKiNisoNaTerminu = UporabnikDB::uporabnikiKiNisoNaTerminu($terminID);
-            $terminID = $_GET["terminID"];
-            $termin = TerminDB::get($terminID);
+
+            // Try to get termin from cache
+            $termin = null;
+            $cacheKey = 'termin_' . $terminID;
+            try {
+                $termin = RedisService::get($cacheKey);
+            } catch (\Exception $e) {
+                $termin = null;
+            }
+            if ($termin === null) {
+                $termin = TerminDB::get($terminID);
+                try { RedisService::set($cacheKey, $termin, 300); } catch (\Exception $e) {}
+            }
 
             ViewHelper::render("view/prisotnost.php", ["studentiNaTerminu" =>  $studentiNaTerminu,"studentiKiNisoNaTerminu" => $studentiKiNisoNaTerminu , "terminID" => $terminID, "termin" => $termin]);
         }
