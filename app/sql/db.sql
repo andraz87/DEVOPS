@@ -1,3 +1,7 @@
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
+FLUSH PRIVILEGES;
+
+
 drop database if exists dn3;
 create database dn3;
 use dn3;
