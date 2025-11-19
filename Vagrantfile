@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
   # nalozi vse potrebne pakete, zazene sql skripto, ki nastavi bazo, ostalo pa itak ze privzeto tece
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
-    apt-get install -y apache2 mysql-server php libapache2-mod-php php-mysql
+    apt-get install -y apache2 mysql-server php libapache2-mod-php php-mysql redis-server php-redis
     mysql < /var/www/html/sport-app/sql/db.sql
   SHELL
 end

@@ -16,14 +16,14 @@ Platforma omogoča prijavo in uporabo sistema za športne aktivnosti tako štude
 Projekt uporablja štiri osnovne komponente:
 
 1. **HTTP strežnik** – Apache2
-2. **Aplikacija** – *PHP brez framework-a
+2. **Aplikacija** – PHP brez framework-a
 3. **SQL baza** – MySql
-4. **Cache sistem** – Radis (TODO)
+4. **Cache sistem** – Redis
 
 ## Verzija 1: Vagrant
 
 * Namestitev Ubuntu/focal64
-* Provisioning (git, apache2 mysql-server php libapache2-mod-php php-mysql)
+* Provisioning (apache2 mysql-server php libapache2-mod-php php-mysql redis-server php-redis)
 * Samodejen deploy aplikacije
 
 ## Verzija 2: cloud-init
