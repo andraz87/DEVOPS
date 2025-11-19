@@ -1,12 +1,25 @@
 <?php
 // model/TerminDB.php
 require_once("model/DBInit.php");
+require_once "model/RedisInit.php";
 
 class TerminDB {
     public static function getAll() {
+        $redis = RedisInit::getInstance();
+        $cacheKey = "termin_all"     ;
+
+        $cached = $redis->get($cacheKey);
+        if ($cached !== false) {
+            return json_decode($cached, true);
+        }
+
+
         $db = DBInit::getInstance();
         $stmt = $db->query("SELECT * FROM termin WHERE seIzvaja = TRUE  ORDER BY dan, zacetek");
-        return $stmt->fetchAll();
+        $result = $stmt->fetchAll();
+
+        $redis->set($cacheKey, json_encode($result), 3600);
+        return $result;
     }
 
     public static function insert($data) {
