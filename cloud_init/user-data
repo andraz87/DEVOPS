@@ -1,0 +1,16 @@
+#cloud-config
+
+packages:
+  - apache2
+  - mysql-server
+  - php
+  - libapache2-mod-php
+  - php-mysql
+  - redis-server
+  - php-redis
+
+runcmd:
+  - apt-get update
+
+final_message: "Cloud-init finished."
+
