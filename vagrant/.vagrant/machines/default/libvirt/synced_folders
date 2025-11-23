@@ -1,1 +1,0 @@
-{"9p":{"/var/www/html/sport-app":{"type":"9p","guestpath":"/var/www/html/sport-app","hostpath":"/srv/DEVOPS/app","disabled":false,"__vagrantfile":true,"target":"/var/www/html/sport-app","accessmode":"passthrough","mount":true,"readonly":null,"mount_tag":"a1fed9d2b95c43f517a04e1e5e6e6d2"}}}

@@ -11,7 +11,7 @@ if [[ $output == *"$vmname"* ]]; then
 else
   echo VM "$vmname" does not exist. launching...
   multipass launch \
-	--cloud-init /home/mversnjak/DEVOPS/cloud_init/user-data \
+	--cloud-init /home/mversnjak/DEVOPS/cloud_init/user-data.yaml \
 	--name "$vmname" &&
   multipass transfer -r /home/mversnjak/DEVOPS/app/ "$vmname":/home/ubuntu/app &&
   multipass exec "$vmname" -- sudo mv /home/ubuntu/app /var/www/html/sport-app &&
