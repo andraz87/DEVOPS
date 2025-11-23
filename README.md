@@ -2,30 +2,42 @@
 
 ## Opis projekta
 
-Platforma omogoča prijavo in uporabo sistema za športne aktivnosti tako študentom kot profesorjem. Sistem ponuja:
+Platforma za športne aktivnosti omogoča:  
+- Registracijo/prijavo uporabnikov (študent, profesor, gost)  
+- Pregled aktivnosti in prijavo študentov  
+- Kreiranje aktivnosti in označevanje prisotnosti  
+- Gostje vidijo samo aktivnosti in prosta mesta  
 
-* Registracijo in prijavo uporabnikov (študent, profesor, gost).
-* Pregled športnih aktivnosti z omejenim številom mest.
-* Prijavo študentov na aktivnosti (odbojka, košarka, tek v naravi, plavanje, pohodništvo, fitnes, funkcionalna vadba).
-* Prikaz štetja udeležb za študenta.
-* Kreiranje aktivnosti in označevanje prisotnosti s strani profesorjev.
-* Gostje lahko vidijo samo aktivnosti in prosta mesta.
+## Arhitektura
 
-## Arhitektura projekta
+- HTTP strežnik: Apache2  
+- Aplikacija: PHP  
+- SQL baza: MySQL  
+- Cache: Redis  
 
-Projekt uporablja štiri osnovne komponente:
+## Verzija 1: Vagrant (libvirt)
 
-1. **HTTP strežnik** – Apache2
-2. **Aplikacija** – PHP brez framework-a
-3. **SQL baza** – MySql
-4. **Cache sistem** – Redis
+**Namestitev**  
+- Ubuntu 22.04 LTS (box: `generic/ubuntu2204`)  
+- Paketni stack: Apache2, MySQL, PHP, libapache2-mod-php, php-mysql, Redis, php-redis  
+- ```$ vagrant up```
+- (optional) ssh port forwarding
 
-## Verzija 1: Vagrant
+**Predpogoji**  
+- Vagrant, libvirt, vagrant-libvirt plugin
+- Uporabnik v pravih skupinah (`libvirt`, `libvirt-qemu`)
+- Se nahajaš v vagrant direktoriju
 
-* Namestitev Ubuntu/focal64
-* Provisioning (apache2 mysql-server php libapache2-mod-php php-mysql redis-server php-redis)
-* Samodejen deploy aplikacije
+## Verzija 2: Multipass / cloud-init
 
-## Verzija 2: cloud-init
+**Namestitev**
 
-TODO
+- ```$ ./cloud_init.sh```
+- Paketni stack: Apache2, MySQL, PHP, libapache2-mod-php, php-mysql, Redis, php-redis
+- (optional) ssh port forwarding
+
+
+**Predpogoji**
+
+- Multipass
+- Se nahajaš v cloud_init direktoriju
