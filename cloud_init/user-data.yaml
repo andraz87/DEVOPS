@@ -8,3 +8,8 @@ packages:
   - php-mysql
   - redis-server
   - php-redis
+
+runcmd:
+  - [ systemctl, enable, --now, apache2 ]
+  - [ systemctl, enable, --now, mysql ]
+  - [ systemctl, enable, --now, redis-server ]
