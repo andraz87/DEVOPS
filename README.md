@@ -28,6 +28,12 @@ Platforma za športne aktivnosti omogoča:
 - Uporabnik v pravih skupinah (`libvirt`, `libvirt-qemu`)
 - Se nahajaš v vagrant direktoriju
 
+### Slike
+![terminal_ls](slike/slika1.png)
+![aplikacija_ssh_port_forward](slike/slika2.png)
+![postman_request_1](slike/slika3-%201zahtevek.png)
+![postman_request_2](slike/slika4-2zahtevek.png)
+
 ## Verzija 2: Multipass / cloud-init
 
 **Namestitev**
