@@ -28,6 +28,10 @@ Platforma za športne aktivnosti omogoča:
 - Uporabnik v pravih skupinah (`libvirt`, `libvirt-qemu`)
 - Se nahajaš v vagrant direktoriju
 
+### Asciinema
+
+[![asciicast](https://asciinema.org/a/GlW79RXtr4XVBkWbfLyJxfobJ.svg)](https://asciinema.org/a/GlW79RXtr4XVBkWbfLyJxfobJ)
+
 ### Slike
 ![terminal_ls](slike/slika1.png)
 ![aplikacija_ssh_port_forward](slike/slika2.png)
