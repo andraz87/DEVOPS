@@ -2,9 +2,9 @@ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
 FLUSH PRIVILEGES;
 
 
-drop database if exists dn3;
-create database dn3;
-use dn3;
+DROP DATABASE IF EXISTS dn3;
+CREATE DATABASE dn3 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE dn3;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";

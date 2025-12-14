@@ -2,6 +2,7 @@
 class RedisInit {
     public static function getInstance() {
         static $redis = null;
+        static $REDIS_HOST = getenv('REDIS_HOST') ?: '127.0.0.1';
 
         if ($redis === null) {
             if (!class_exists('\Redis')) {
@@ -9,7 +10,7 @@ class RedisInit {
             }
 
             $redis = new \Redis();
-            $redis->connect('127.0.0.1', 6379);
+            $redis->connect($REDIS_HOST, 6379);
         }
 
         return $redis;

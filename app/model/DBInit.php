@@ -2,15 +2,19 @@
 class DBInit {
     public static function getInstance() {
         static $db = null;
+        static $MYSQL_HOST = getenv('MYSQL_HOST') ?: 'localhost';
 
         if ($db === null) {
-            $dsn = "mysql:host=localhost;dbname=dn3;charset=utf8";
+            $dsn = "mysql:host=$MYSQL_HOST;dbname=dn3;charset=utf8mb4";
             $user = "root";
             $password = "";
+            $options = [
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4",
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            ];
 
             try {
-                $db = new PDO($dsn, $user, $password);
-                $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $db = new PDO($dsn, $user, $password, $options);
             } catch (PDOException $e) {
                 echo "Napaka pri povezavi z bazo: " . $e->getMessage();
                 exit();

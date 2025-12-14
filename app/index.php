@@ -8,8 +8,6 @@ require_once("ViewHelper.php");
 
 define("BASE_URL", rtrim(dirname($_SERVER["SCRIPT_NAME"]), "/") . "/index.php/");
 
-
-
 // enostaven usmerjevalnik (router)
 $path = isset($_SERVER["PATH_INFO"]) ? trim($_SERVER["PATH_INFO"], "/") : "";
 $path = isset($_SERVER["PATH_INFO"]) ? trim($_SERVER["PATH_INFO"], "/") : "";
