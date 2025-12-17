@@ -1,6 +1,12 @@
-:80
+:80 {
+	root * /var/www/html
+	php_fastcgi php:9000
+	file_server
+}
 
-root * /var/www/html
-php_fastcgi php:9000
-
-file_server
+:443 {
+	root * /var/www/html
+	php_fastcgi php:9000
+	file_server
+	tls /etc/caddy/certs/server.crt /etc/caddy/certs/server.key
+}

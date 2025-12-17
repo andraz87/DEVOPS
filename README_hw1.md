@@ -51,3 +51,10 @@ Platforma za športne aktivnosti omogoča:
 
 - Multipass
 - Se nahajaš v cloud_init direktoriju
+
+
+## SSL
+
+ukaz za podpisovaje svojih certifikatov:
+pojdi v ./certs
+openssl req -x509 -newkey rsa:4096 -nodes   -keyout server.key -out server.crt -days 365   -subj "/CN=[JAVNI_IP]"
