@@ -2,4 +2,7 @@ devops-vm-01.lrk.si {
 	root * /var/www/html
 	php_fastcgi php:9000
 	file_server
+
+	#samo podpiusani certifikati. Let's Encrypt izda max 5 certifikatov na domeno v 7 dneh.
+	tls internal	#samo za razvoj
 }
