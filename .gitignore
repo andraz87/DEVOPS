@@ -1,3 +1,2 @@
 **/.vagrant/
-server.crt
-server.key
+.env

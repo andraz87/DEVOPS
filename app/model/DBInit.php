@@ -7,7 +7,7 @@ class DBInit {
         if ($db === null) {
             $dsn = "mysql:host=$MYSQL_HOST;dbname=dn3;charset=utf8mb4";
             $user = "root";
-            $password = "";
+            $password = getenv('MYSQL_ROOT_PASSWORD') ?: '';
             $options = [
                 PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4",
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

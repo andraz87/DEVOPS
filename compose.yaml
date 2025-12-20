@@ -19,14 +19,13 @@ services:
       - mysql
       - redis
     environment:
-      - REDIS_HOST=redis
-      - MYSQL_HOST=mysql
+      REDIS_HOST: ${REDIS_HOST}
+      MYSQL_HOST: ${MYSQL_HOST}
 
   mysql:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: ""
-      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
       - ./app/sql/db.sql:/docker-entrypoint-initdb.d/db.sql
