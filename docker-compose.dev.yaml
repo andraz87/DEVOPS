@@ -6,13 +6,15 @@ services:
       - "443:443"
     volumes:
       - ./app:/var/www/html
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      
+      - ./Caddyfile.dev:/etc/caddy/Caddyfile
+    environment:
+      APP_URL: ${APP_URL}
+    
     depends_on:
       - php
   
   php:
-    build: ./app
+    build: ./docker/php
     volumes:
       - ./app:/var/www/html
     depends_on:
@@ -21,6 +23,7 @@ services:
     environment:
       REDIS_HOST: ${REDIS_HOST}
       MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
   mysql:
     image: mysql:8.0
