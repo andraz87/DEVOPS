@@ -23,7 +23,7 @@ COPY --from=build /usr/local/lib/php/extensions /usr/local/lib/php/extensions
 COPY --from=build /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
 
 WORKDIR /var/www/html
-COPY . .
+COPY ./app .
 
 RUN chown -R www-data:www-data /var/www/html
 USER www-data
