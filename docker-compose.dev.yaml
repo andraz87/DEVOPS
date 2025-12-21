@@ -14,9 +14,11 @@ services:
       - php
   
   php:
-    build: ./docker/php
+    build: 
+      context: .
+      dockerfile: ./docker/php/Dockerfile
     volumes:
-      - ./app:/var/www/html
+     - ./app:/var/www/html
     depends_on:
       - mysql
       - redis
