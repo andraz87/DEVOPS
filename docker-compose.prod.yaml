@@ -1,0 +1,32 @@
+services:
+  caddy:
+    image: ghcr.io/andraz87/caddy:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      APP_URL: ${APP_URL}
+    depends_on:
+      - php
+  
+  php:
+    image: ghcr.io/andraz87/php:latest
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
+      MYSQL_HOST: ${MYSQL_HOST}
+
+  mysql:
+    image: ghcr.io/andraz87/mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+
+volumes:
+  mysql_data:
