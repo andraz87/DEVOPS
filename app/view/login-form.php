@@ -12,7 +12,7 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="card p-4 shadow" style="max-width: 400px; width: 100%;">
         <h2 class="mb-4 text-center">Prijava</h2>
-         <p>testiram ci/cd</p>
+         <p>testiram ci/cd.</p>
 
         <form action="<?= BASE_URL . "login" ?>" method="post">
             <div class="mb-3">
