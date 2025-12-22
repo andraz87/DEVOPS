@@ -66,6 +66,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_caddy.outputs.tags }}
           labels: ${{ steps.meta_caddy.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
 
       # PHP IMAGE 
@@ -93,6 +95,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_php.outputs.tags }}
           labels: ${{ steps.meta_php.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       # =========================
       # ======= MYSQL IMAGE =====
@@ -121,3 +125,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_mysql.outputs.tags }}
           labels: ${{ steps.meta_mysql.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
