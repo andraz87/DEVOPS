@@ -13,7 +13,9 @@ public static function prisotni() {
 
             foreach ($studenti as $studentId) {
                 PrisotnostDB::dodajPrisotnost($studentId, $terminID);
-                echo "Student ID: " . htmlspecialchars($studentId) . "<br>";
+                //echo "Student ID: " . htmlspecialchars($studentId) . "<br>";
+                error_log("Student ID: $studentId");
+
             }
 
             ViewHelper::redirect(BASE_URL . "prof");
