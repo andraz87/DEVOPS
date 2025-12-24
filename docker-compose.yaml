@@ -6,6 +6,9 @@ services:
       - "443:443"
     environment:
       APP_URL: ${APP_URL}
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
     depends_on:
       - php
   
@@ -31,3 +34,5 @@ services:
 
 volumes:
   mysql_data:
+  caddy_data:
+  caddy_config:
