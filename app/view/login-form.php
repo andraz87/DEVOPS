@@ -40,7 +40,7 @@
 
                 <hr class="my-3">
 
-        <a href="<?= BASE_URL ?>seznam" class="btn btn-outline-secondary w-100">Nadaljuj brez prijave</a>
+        <a href="<?= BASE_URL ?>seznam" class="btn btn-outline-secondary w-100">Prijavi se kot gost</a>
     </div>
 </div>
 
