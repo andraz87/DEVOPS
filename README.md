@@ -8,7 +8,7 @@ Platforma za športne aktivnosti omogoča:
 - Kreiranje aktivnosti in označevanje prisotnosti  
 - Gostje vidijo samo aktivnosti in prosta mesta  
 
-Aplikacija je zapakirana v več Docker kontejnerjev in avtomatizirano nameščena z uporabo Docker Compose.
+Aplikacija je zapakirana v več Docker kontejnerjev in nameščena z uporabo Docker Compose.
 
 ---
 
