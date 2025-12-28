@@ -38,6 +38,10 @@ Vsaka komponenta teče v svojem kontejnerju.
 
 ## Docker Compose Stack
 
+### Asciinema - docker compose up
+
+[![asciicast](https://asciinema.org/a/mCZBA2vGbafBlZBQ9j0YSPJFy.svg)](https://asciinema.org/a/mCZBA2vGbafBlZBQ9j0YSPJFy)
+
 ### Storitve
 
 **Caddy**
