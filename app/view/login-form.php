@@ -14,7 +14,7 @@
         <h2 class="mb-4 text-center">Prijava</h2>
 
         <form action="<?= BASE_URL . "login" ?>" method="post">
-            <div class="mb-4">
+            <div class="mb-3">
                 <label for="username" class="form-label">Uporabniško ime</label>
                 <input type="text" class="form-control" id="username" name="username" required autofocus>
             </div>
@@ -40,7 +40,7 @@
 
                 <hr class="my-3">
 
-        <a href="<?= BASE_URL ?>seznam" class="btn btn-outline-secondary w-100">Nadaljuj brez prijave</a>
+        <a href="<?= BASE_URL ?>seznam" class="btn btn-outline-secondary w-100">Nadaljuj kot gost</a>
     </div>
 </div>
 
