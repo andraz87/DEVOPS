@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: php
+spec:
+  selector:
+    io.kompose.service: php
+  ports:
+    - name: fpm
+      port: 9000
+      targetPort: 9000

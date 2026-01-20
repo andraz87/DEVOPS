@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yaml -o kompose
+    kompose.version: 1.38.0 (a8f5d1cbd)
+  labels:
+    io.kompose.service: php
+  name: php
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      io.kompose.service: php
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yaml -o kompose
+        kompose.version: 1.38.0 (a8f5d1cbd)
+      labels:
+        io.kompose.service: php
+    spec:
+      containers:
+        - env:
+            - name: MYSQL_HOST
+              value: mysql
+            - name: MYSQL_ROOT_PASSWORD
+              value: rootpassword6793
+            - name: REDIS_HOST
+              value: redis
+          image: ghcr.io/andraz87/php:latest
+          name: php
+      restartPolicy: Always
