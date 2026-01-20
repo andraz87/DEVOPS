@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: caddy
+  labels:
+    app: caddy
+spec:
+  ports:
+    - port: 80
+      name: http
+  selector:
+    app: caddy
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caddy-config
+data:
+  Caddyfile: |
+    :80 {
+        root * /var/www/html
+        php_fastcgi php:9000
+        file_server
+        log {
+            output stdout
+        }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caddy
+  labels:
+    app: caddy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: caddy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: caddy
+    spec:
+      containers:
+        - name: caddy
+          image: ghcr.io/andraz87/caddy:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: caddy-config
+              mountPath: /etc/caddy/Caddyfile
+              subPath: Caddyfile
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: caddy-config
+          configMap:
+            name: caddy-config
