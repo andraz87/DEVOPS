@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file ../compose.yaml convert
+    kompose.version: 1.37.0 (HEAD)
+  labels:
+    io.kompose.service: caddy
+  name: caddy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: caddy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file ../compose.yaml convert
+        kompose.version: 1.37.0 (HEAD)
+      labels:
+        io.kompose.service: caddy
+    spec:
+      containers:
+        - env:
+            - name: APP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: APP_URL
+          image: caddy:2-alpine
+          name: caddy
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "50m"
+            limits:
+              memory: "64Mi"
+              cpu: "200m"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          volumeMounts:
+            - mountPath: /etc/caddy/Caddyfile
+              name: caddy-config
+              subPath: Caddyfile
+            - mountPath: /var/www/html/index.php
+              name: caddy-config
+              subPath: index.php
+      restartPolicy: Always
+      volumes:
+        - name: caddy-config
+          configMap:
+            name: caddy-config
+

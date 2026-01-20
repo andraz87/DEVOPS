@@ -1,0 +1,47 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      APP_URL: ${APP_URL}
+    volumes:
+      - ./app:/var/www/html
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - php
+  
+  php:
+    build: ./app
+    expose:
+      - 9000
+    volumes:
+      - ./app:/var/www/html
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+  mysql:
+    image: mysql:8.0
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./app/sql/db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./mysql.cnf:/etc/mysql/conf.d/my.cnf:ro
+
+  redis:
+    image: redis:7-alpine
+    expose:
+      - 6379
+
+volumes:
+  mysql_data:
+
