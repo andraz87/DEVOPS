@@ -46,14 +46,17 @@ spec:
               cpu: "200m"
           readinessProbe:
             httpGet:
-              path: /
+              path: /health
               port: 80
-            initialDelaySeconds: 5
+            initialDelaySeconds: 20
             periodSeconds: 10
           volumeMounts:
             - mountPath: /etc/caddy/Caddyfile
               name: caddy-config
               subPath: Caddyfile
+            - mountPath: /var/www/html/index.php
+              name: caddy-config
+              subPath: index.php
       restartPolicy: Always
       volumes:
         - name: caddy-config

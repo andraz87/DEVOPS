@@ -42,7 +42,6 @@ spec:
                 secretKeyRef:
                   name: app-secrets
                   key: REDIS_HOST
-            - name: MYSQL_ROOT_PASSWORD
           image: ghcr.io/andraz87/php:latest
           name: php
           ports:
@@ -65,4 +64,14 @@ spec:
               port: 9000
             initialDelaySeconds: 15
             periodSeconds: 20
+          volumeMounts:
+            # ADDED: Mount the PHP-FPM configuration to allow environment variables.
+            - mountPath: /usr/local/etc/php-fpm.d/k8s-php-fpm.conf
+              name: php-config
+              subPath: k8s-php-fpm.conf
+      volumes:
+        # ADDED: Define the volume for the PHP config.
+        - name: php-config
+          configMap:
+            name: php-config
       restartPolicy: Always

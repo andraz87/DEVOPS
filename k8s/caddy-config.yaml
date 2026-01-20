@@ -4,8 +4,14 @@ metadata:
   name: caddy-config
 data:
   Caddyfile: |-
-    {$APP_URL} {
-    	root * /var/www/html
-    	php_fastcgi php:9000
-    	file_server
+    :80 {
+        handle /health {
+          respond "OK" 200
+        }
+
+        root * /var/www/html
+        php_fastcgi php:9000
+        file_server
     }
+
+  index.php: "<?php // Placeholder for Caddy"

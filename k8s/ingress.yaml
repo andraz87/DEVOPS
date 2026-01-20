@@ -3,7 +3,8 @@ kind: Ingress
 metadata:
   name: my-app-ingress
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-staging" # letsencrypt-prod
+    cert-manager.io/cluster-issuer: "letsencrypt-prod" # prod | staging
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   ingressClassName: nginx
   tls:
