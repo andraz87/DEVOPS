@@ -1,18 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app-ingress
+  name: my-app-ingress
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    # If using cert-manager (ClusterIssuer must exist in your cluster)
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # letsencrypt-prod
 spec:
+  ingressClassName: nginx
   tls:
     - hosts:
-        - my-app.example.com # CHANGE THIS to your actual domain/IP
-      secretName: app-tls-secret
+        - devops-vm-42.lrk.si
+      secretName: my-app-tls-secret
   rules:
-    - host: my-app.example.com # CHANGE THIS
+    - host: devops-vm-42.lrk.si
       http:
         paths:
           - path: /

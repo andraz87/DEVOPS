@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caddy-config
+data:
+  Caddyfile: |-
+    {$APP_URL} {
+    	root * /var/www/html
+    	php_fastcgi php:9000
+    	file_server
+    }
