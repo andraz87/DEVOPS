@@ -1,139 +1,86 @@
-# Docker Compose
+# Kubernetes verzija aplikacije (PHP-FPM + MySQL + Redis + Caddy) na Minikube
 
-## Opis projekta
+## Okolje
+- Minikube je lokalni Kubernetes cluster (tece na Ubuntu VM).
+- Upravljanje poteka prek `kubectl`.
+- `kompose` je bil uporabljen za zacetno pretvorbo iz `docker-compose.yaml` v K8s manifeste.
 
-Platforma za športne aktivnosti omogoča:  
-- Registracijo/prijavo uporabnikov (študent, profesor, gost)  
-- Pregled aktivnosti in prijavo študentov  
-- Kreiranje aktivnosti in označevanje prisotnosti  
-- Gostje vidijo samo aktivnosti in prosta mesta  
+## Kompose in manifesti
+Manifesti so v mapi `./kompose` in so vecinoma generirani z:
 
-Aplikacija je zapakirana v več Docker kontejnerjev in nameščena z uporabo Docker Compose.
-
----
-
-## Arhitektura
-
-Celoten stack je sestavljen iz **štirih različnih storitev**:
-
-- **Web strežnik**: Caddy (HTTPS, TLS)  
-- **Aplikacija**: PHP 8.3 (PHP-FPM, multi-stage build)  
-- **SQL baza**: MySQL 8.0  
-- **Cache**: Redis 7  
-
-Vsaka komponenta teče v svojem kontejnerju.
-
----
-
-## Tehnologije
-
-- Docker  
-- Docker Compose  
-- Docker BuildX  
-- Multi-stage Docker builds  
-- GitHub Actions (CI/CD)  
-- Caddy 
-
----
-
-## Docker Compose Stack
-
-### Asciinema - docker compose up
-
-[![asciicast](https://asciinema.org/a/mCZBA2vGbafBlZBQ9j0YSPJFy.svg)](https://asciinema.org/a/mCZBA2vGbafBlZBQ9j0YSPJFy)
-
-### Storitve
-
-**Caddy**
-- web strežnik
-- Samodejna TLS konfiguracija (Let's Encrypt)
-- Posredovanje PHP zahtev PHP-FPM kontejnerju
-- Izpostavljeni porti: `80`, `443`
-
-**PHP**
-- PHP 8.3 FPM
-- Multi-stage build
-
-**MySQL**
-- MySQL 8.0
-- Inicializacija baze iz SQL skripte
-
-**Redis**
-- Redis 7 Alpine
-
----
-
-## Persistentni podatki (Volumes)
-
-Uporabljeni so Docker volumes:
-
-- `mysql_data` – podatki MySQL baze  
-- `caddy_data` – TLS certifikati  
-- `caddy_config` – Caddy konfiguracija  
-
----
-
-## TLS / HTTPS
-
-HTTPS je omogočen z uporabo **Caddy** strežnika:
-
-- Samodejno pridobivanje in obnavljanje TLS certifikatov
-- Konfiguracija preko `APP_URL` okoljske spremenljivke
-- Brez ročne nastavitve certifikatov
-
-Primer konfiguracije:
-
-```text
-{$APP_URL} {
-    root * /var/www/html
-    php_fastcgi php:9000
-    file_server
-}
-```
-## Multi-stage Build (PHP)
-
-PHP image uporablja multi-stage Docker build:
-
-**Build stage**
-- Namestitev build odvisnosti
-- Kompilacija PHP razširitev
-
-**Runtime stage**
-- Minimalna Alpine image
-- Vsebuje samo runtime knjižnice
-- Manjša velikost in boljša varnost
-
-## Okoljske spremenljivke
-
-Primer `.env` datoteke:
-
-```text
-REDIS_HOST=redis
-SQL_HOST=mysql
-MYSQL_ROOT_PASSWORD=rootpassword
-APP_URL=example.com
+```bash
+kompose convert -f docker-compose.yaml -o kompose
 ```
 
-## CI/CD – GitHub Actions
+Seznam manifestov v `./kompose`:
+- caddy-caddyfile-configmap.yaml
+- caddy-cm0-configmap.yaml
+- caddy-deployment.yaml
+- caddy-service.yaml
+- caddy-data-persistentvolumeclaim.yaml
+- caddy-config-persistentvolumeclaim.yaml
+- caddy-claim1-persistentvolumeclaim.yaml
+- mysql-deployment.yaml
+- mysql-service.yaml
+- mysql-data-persistentvolumeclaim.yaml
+- mysql-claim2-persistentvolumeclaim.yaml
+- mysql-cm1-configmap.yaml
+- redis-deployment.yaml
+- redis-service.yaml
+- php-deployment.yaml
+- php-service.yaml
 
-Za avtomatizacijo build in publish procesov je uporabljen **GitHub Actions workflow**.
+Opombe:
+- `kompose` ni ustvaril Service objektov za vse servise, ker v `docker-compose` niso bili izpostavljeni `ports`. Zato so rocno dodani Service manifesti za:
+  - `php` (port 9000, da Caddy uporablja `php_fastcgi php:9000`)
+  - `mysql` (za interno dosegljivost)
+  - `redis` (za interno dosegljivost)
+- Za trajno shrambo so uporabljeni PersistentVolumeClaim-i (PVC), npr. za MySQL data ter Caddy data/config.
+- Caddy konfiguracija je v ConfigMapu `caddy-caddyfile`.
 
-### Lastnosti CI/CD pipeline-a
-- Trigger:
-  - `push` na `main`
-  - verzionirani tagi (`vX.Y.Z`)
-  - pull request (brez pushanja image-ov)
-- Docker BuildX
-- Cache z `type=gha`
-- Build in push v **GitHub Container Registry (GHCR)**
+## Zagon
+Koraki za zagon na Minikube:
 
-### Avtomatizirani image-i
-- `ghcr.io/andraz87/caddy`
-- `ghcr.io/andraz87/php`
-- `ghcr.io/andraz87/mysql`
+```bash
+minikube start --driver=docker
+kubectl apply -f kompose
+kubectl get pods
+kubectl get svc
+```
 
-### Tagging strategija
+## Dostop do aplikacije
+Ker Minikube z docker driverjem na VM ne routa NodePort prometa iz javnega IP-ja, uporabim port-forward:
 
-- `latest`
-- semver (`vX.Y.Z`, `X.Y`, `X`)
-- `sha` commit hash
+```bash
+sudo KUBECONFIG=$HOME/.kube/config kubectl port-forward --address 0.0.0.0 svc/caddy 80:80
+```
+
+Nato odprem:
+- `http://<VM_PUBLIC_IP>/`
+- ali `http://<domena>/`
+
+Opomba: ce brskalnik sili na HTTPS, je to lahko HSTS/HTTPS-only nastavitev. Za test uporabi incognito ali pocisti HSTS za domeno.
+
+## Trenutno stanje (primer)
+
+```text
+NAME                     READY   STATUS    RESTARTS   AGE
+caddy-...                1/1     Running   0          ...
+mysql-...                1/1     Running   0          ...
+php-...                  1/1     Running   0          ...
+php-...                  1/1     Running   0          ...
+php-...                  1/1     Running   0          ...
+redis-...                1/1     Running   0          ...
+```
+
+## Kratka arhitektura
+- Caddy je reverse proxy (HTTP) in uporablja `php_fastcgi` na Service `php` (port 9000).
+- PHP se povezuje na MySQL (Service `mysql`) in Redis (Service `redis`) prek cluster DNS.
+- Podatki za MySQL so na PVC (trajna shramba).
+
+## Kaj je se TODO za koncno oddajo
+- Ingress + TLS (cert-manager) na javnem IP (production-like)
+- readiness/liveness probes
+- rolling update in blue/green za izbran service
+- multi-stage custom image build
+- CI/CD (npr. GitHub Actions) build/tag/push
