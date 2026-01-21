@@ -30,13 +30,13 @@
                 </div>
             <?php endif; ?>
 
-            <button type="submit" class="btn btn-primary w-100">Prijava</button>
+            <button type="submit" class="btn w-100 btn-warning border-dark">Prijava</button>
         </form>
         
 
         <hr class="my-3">
 
-        <a href="<?= BASE_URL ?>registracija" class="btn btn-primary w-100">Registriraj se</a>
+        <a href="<?= BASE_URL ?>registracija" class="btn w-100 btn-warning border-dark">Registriraj se</a>
 
                 <hr class="my-3">
 
