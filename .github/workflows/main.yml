@@ -2,12 +2,10 @@ name: Build and publish Docker images
 
 on:
   push:
-    branches:
-      - main
+    paths-ignore:
+      - '**/*.md' # za tage nima efekta
     tags:
       - v*.*.*
-  pull_request:
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,7 +13,6 @@ permissions:
 
 env:
   DOCKER_REGISTRY: ghcr.io
-  # MODIFIED: Ensure this matches your GitHub username.
   IMAGE_NAMESPACE: andraz87
 
 jobs:
@@ -38,7 +35,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # PHP IMAGE 
-      # This is the only custom image we need because it contains your application code.
       - name: Docker meta (php)
         id: meta_php
         uses: docker/metadata-action@v5
@@ -58,7 +54,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          # Using the Dockerfile specifically designed for the production build.
           file: app/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_php.outputs.tags }}
